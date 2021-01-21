@@ -1,0 +1,47 @@
+model ORProject.mod;
+data OR_Project.dat;
+option solver cplex;
+    
+solve;
+
+printf   'Demand at all hospitals:  \n' ;
+display demand_hosp;
+
+printf 'Production Volume at AM center: \n';
+display production_volume;
+
+printf 'Products Shipped from AM center to other hospitals: \n';
+display prod_shipped;
+
+var Transportation_Cost = sum {i in HOSPITALS, j in HOSPITALS, p in PRODUCTS} transportation_cost * dist_betwn_hosp[i,j] * weight[p] * prod_shipped[i,j,p];
+
+var Setup_Cost = sum {i in HOSPITALS} setup_cost * num_equip[i];
+
+var Production_Cost = sum {i in HOSPITALS, p in PRODUCTS} production_volume[i,p] *  prod_cost[i,p];
+
+var Operating_Cost = sum {i in HOSPITALS, p in PRODUCTS} operating_cost[i,p] * production_volume[i,p] * processing_time[p];
+
+
+display Total_Cost;
+
+display Setup_Cost;
+
+display Production_Cost;
+
+display Transportation_Cost;
+
+display Operating_Cost;
+ 
+display num_equip;
+     
+#display "Transportation Cost" , sum {i in HOSPITALS, j in HOSPITALS, p in PRODUCTS} transportation_cost * dist_betwn_hosp[i,j] * weight[p] * prod_shipped[i,j,p]
+
+
+#display Trans;	
+	
+#printf"\n ORIGIN	DESTINATION	PRODUCT  Trans\", 0>>Example4.txt;		
+
+#	printf {i in ORIGIN, j in DESTINATION, p in PRODUCTS:Trans[i,j,p]>0}: "\n\n %s	 %s 	%s 	%10.0f \", i,j,p,Trans[i,j,p]>> Example4.txt;
+	
+	
+	
